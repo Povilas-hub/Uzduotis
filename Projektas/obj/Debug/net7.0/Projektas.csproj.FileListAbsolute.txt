@@ -1,0 +1,15 @@
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.csproj.AssemblyReference.cache
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.AssemblyInfoInputs.cache
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.AssemblyInfo.cs
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.csproj.CoreCompileInputs.cache
+C:\Users\Povilas\Desktop\Projektas\bin\Debug\net7.0\Projektas.exe
+C:\Users\Povilas\Desktop\Projektas\bin\Debug\net7.0\Projektas.deps.json
+C:\Users\Povilas\Desktop\Projektas\bin\Debug\net7.0\Projektas.runtimeconfig.json
+C:\Users\Povilas\Desktop\Projektas\bin\Debug\net7.0\Projektas.dll
+C:\Users\Povilas\Desktop\Projektas\bin\Debug\net7.0\Projektas.pdb
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.dll
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\refint\Projektas.dll
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.pdb
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\Projektas.genruntimeconfig.cache
+C:\Users\Povilas\Desktop\Projektas\obj\Debug\net7.0\ref\Projektas.dll
