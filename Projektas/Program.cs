@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+
 
 class Naudotojas
 {
@@ -59,11 +60,12 @@ class Program
     static void Main(string[] args)
     {
         string connectionString = "server=localhost;uid=root;pwd=root;database=duomenys";
+        MySqlConnection connection = new MySqlConnection(connectionString);
 
         List<Naudotojas> naudotojai = new List<Naudotojas>();
         List<Bendrija> bendrijos = new List<Bendrija>();
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        using (connection)
         {
             connection.Open();
 
@@ -145,51 +147,61 @@ class Program
                 }
             }
             else if (currentUser is Vadybininkas)
+    {
+        Console.WriteLine("Vartotojas " + currentUser.Vardas);
+        Console.WriteLine();
+
+        Console.WriteLine("Iveskite bendrija");
+        string communityName = Console.ReadLine();
+
+        Bendrija selectedBendrija = bendrijos.Find(b => b.Pavadinimas == communityName);
+        if (selectedBendrija != null)
+        {
+            Console.WriteLine("Bendrija: " + selectedBendrija.Pavadinimas);
+            Console.WriteLine("Elektros kaina:  " + selectedBendrija.ElektrosKaina);
+            Console.WriteLine("Vandens kaina: " + selectedBendrija.VandensKaina);
+            Console.WriteLine("Sildymo kaina: " + selectedBendrija.SildymoKaina);
+
+            Console.WriteLine("Iveskite nauja elektros kaina :");
+            decimal newElektrosKaina = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Iveskite nauja vandens kaina:");
+            decimal newVandensKaina = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Iveskite nauja sildymo kaina:");
+            decimal newSildymoKaina = decimal.Parse(Console.ReadLine());
+
+            selectedBendrija.ElektrosKaina = newElektrosKaina;
+            selectedBendrija.VandensKaina = newVandensKaina;
+            selectedBendrija.SildymoKaina = newSildymoKaina;
+
+            using (connection)
             {
-                Console.WriteLine("Vartotojas " + currentUser.Vardas);
-                Console.WriteLine();
+                connection.Open(); 
 
-                Console.WriteLine("Iveskite bendrija");
-                string communityName = Console.ReadLine();
-
-                Bendrija selectedBendrija = bendrijos.Find(b => b.Pavadinimas == communityName);
-                if (selectedBendrija != null)
+                string updateQuery = "UPDATE Bendrija SET elektros_kaina = @elektrosKaina, vandens_kaina = @vandensKaina, sildymo_kaina = @sildymoKaina WHERE pavadinimas = @pavadinimas";
+                using (MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection))
                 {
-                    Console.WriteLine("Bendrija: " + selectedBendrija.Pavadinimas);
-                    Console.WriteLine("Elektros kaina:  " + selectedBendrija.ElektrosKaina);
-                    Console.WriteLine("Vandens kaina: " + selectedBendrija.VandensKaina);
-                    Console.WriteLine("Sildymo kaina: " + selectedBendrija.SildymoKaina);
+                    updateCommand.Parameters.AddWithValue("@elektrosKaina", newElektrosKaina);
+                    updateCommand.Parameters.AddWithValue("@vandensKaina", newVandensKaina);
+                    updateCommand.Parameters.AddWithValue("@sildymoKaina", newSildymoKaina);
+                    updateCommand.Parameters.AddWithValue("@pavadinimas", selectedBendrija.Pavadinimas);
 
-                    Console.WriteLine("Iveskite nauja elektros kaina :");
-                    decimal newElektrosKaina = decimal.Parse(Console.ReadLine());
-                    Console.WriteLine("Iveskite nauja vandens kaina:");
-                    decimal newVandensKaina = decimal.Parse(Console.ReadLine());
-                    Console.WriteLine("Iveskite nauja sildymo kaina:");
-                    decimal newSildymoKaina = decimal.Parse(Console.ReadLine());
-
-                    selectedBendrija.ElektrosKaina = newElektrosKaina;
-                    selectedBendrija.VandensKaina = newVandensKaina;
-                    selectedBendrija.SildymoKaina = newSildymoKaina;
-
-                    string updateQuery = "UPDATE Bendrija SET elektros_kaina = @elektrosKaina, vandens_kaina = @vandensKaina, sildymo_kaina = @sildymoKaina WHERE pavadinimas = @pavadinimas";
-                    using (MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection))
-                    {
-                        updateCommand.Parameters.AddWithValue("@elektrosKaina", newElektrosKaina);
-                        updateCommand.Parameters.AddWithValue("@vandensKaina", newVandensKaina);
-                        updateCommand.Parameters.AddWithValue("@sildymoKaina", newSildymoKaina);
-                        updateCommand.Parameters.AddWithValue("@pavadinimas", selectedBendrija.Pavadinimas);
-
-                        int rowsAffected = updateCommand.ExecuteNonQuery();
-                        Console.WriteLine("Atnaujinta " + rowsAffected + " eilutes.");
-                    }
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+                    Console.WriteLine("Atnaujinta " + rowsAffected + " eilutes.");
                 }
-                else
-                {
-                    Console.WriteLine("Bendrija nesurasta.");
-                }
+
+                connection.Close(); 
+            }
+        }
+        else
+        {
+            Console.WriteLine("Bendrija nesurasta.");
+        }
             }
             else if (currentUser is Administratorius)
             {
+                using (connection)
+                {
+                    connection.Open();
                 Console.WriteLine("Vartotojas: " + currentUser.Vardas);
                 Console.WriteLine();
 
@@ -255,6 +267,8 @@ class Program
                 else
                 {
                     Console.WriteLine("Bendrija nerasta.");
+                }
+                connection.Close();
                 }
             }
         }
